@@ -1,0 +1,14 @@
+set init
+
+set httpd
+    port 2812
+    allow zabbix:zabbix
+
+check process zabbix-server with pidfile /var/run/zabbix/zabbix_server.pid
+    start program = "/usr/sbin/service zabbix-server start"
+    stop program = "/usr/sbin/service zabbix-server stop"
+
+check process apache with pidfile /var/run/apache2/apache2.pid
+    start program = "/usr/sbin/service apache2 start"
+    stop program = "/usr/sbin/service apache2 stop"
+    depends on zabbix-server

@@ -1,0 +1,35 @@
+data:
+    image: debian
+    volumes:
+    - /var/lib/mysql
+    - /var/lib/zabbix
+    - /etc/zabbix
+    - /var/log
+    command: echo "Data container for zabbix+mysql"
+
+mysql:
+    image: mysql:latest
+
+    environment:
+    - MYSQL_ROOT_PASSWORD=zabbix
+#    - MYSQL_USER=zabbix
+#    - MYSQL_PASSWORD=zabbix
+#    - MYSQL_DATABASE=zabbix
+
+    volumes_from:
+    - data
+
+server:
+    build: .
+
+    ports:
+    - "10051:10051"
+    - "8080:80"
+    - "2812:2812"
+
+    volumes_from:
+    - data
+    
+    links:
+    - mysql
+
